@@ -45,5 +45,69 @@ namespace InvadersUWP_MVVM.Model
         {
             GameOver = true;
         }
+
+        public void StartGame()
+        {
+            GameOver = false;
+            foreach (var invader in _invaders)
+            {
+                OnShipChanged(invader, true);
+                _invaders.Remove(invader);
+            }
+            
+            foreach (var shot in _playerShots)
+            {
+                OnShotMoved(shot, true);
+                _playerShots.Remove(shot);
+            }
+
+            foreach (var shot in _invaderShots)
+            {
+                OnShotMoved(shot, true);
+                _invaderShots.Remove(shot);
+            }
+
+            foreach (var star in _stars)
+            {
+                OnStarChanged(star, true);
+                _stars.Remove(star);
+            }
+
+            for (int i = 0; i < InitialStarCount; i++)
+                _stars.Add(new Point(_random.Next(400), _random.Next(300)));
+            foreach (var star in _stars)
+                OnStarChanged(star, false);
+
+            _player = new Player(new Point(PlayAreaSize.Height - 250, PlayAreaSize.Width / 2), new Size(25, 15));
+            OnShipChanged(_player, false);
+
+            Lives = 2;
+            Wave = 0;
+            NextWave();
+        }
+
+        public event EventHandler<ShipChangedEventArgs> ShipChanged;
+        private void OnShipChanged(Ship ship, bool killed)
+        {
+            EventHandler<ShipChangedEventArgs> shipChanged = ShipChanged;
+            if (shipChanged != null)
+                shipChanged(this, new ShipChangedEventArgs(ship, killed));
+        }
+
+        public event EventHandler<ShotMovedEventArgs> ShotMoved;
+        private void OnShotMoved(Shot shot, bool disappeared)
+        {
+            EventHandler<ShotMovedEventArgs> shotMoved = ShotMoved;
+            if (shotMoved != null)
+                shotMoved(this, new ShotMovedEventArgs(shot, disappeared));
+        }
+
+        public event EventHandler<StarChangedEventArgs> StarChanged;
+        private void OnStarChanged(Point point, bool disappeared)
+        {
+            EventHandler<StarChangedEventArgs> starChanged = StarChanged;
+            if (starChanged != null)
+                starChanged(this, new StarChangedEventArgs(point, disappeared));
+        }
     }
 }
