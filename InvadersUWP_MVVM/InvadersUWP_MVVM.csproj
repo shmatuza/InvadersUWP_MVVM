@@ -99,6 +99,15 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Enums.cs" />
+    <Compile Include="Model\Invader.cs" />
+    <Compile Include="Model\InvadersModel.cs" />
+    <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\Ship.cs" />
+    <Compile Include="Model\ShipChangedEventArgs.cs" />
+    <Compile Include="Model\Shot.cs" />
+    <Compile Include="Model\ShotMovedEventArgs.cs" />
+    <Compile Include="Model\StarChangedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,7 +163,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="ViewModel\" />
     <Folder Include="View\" />
   </ItemGroup>
