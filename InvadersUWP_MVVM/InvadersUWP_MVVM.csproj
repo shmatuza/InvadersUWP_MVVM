@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{ee0eda45-9873-40ec-a194-78c1353eec69}</ProjectGuid>
+    <ProjectGuid>{EE0EDA45-9873-40EC-A194-78C1353EEC69}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InvadersUWP_MVVM</RootNamespace>
@@ -17,9 +17,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
-    
     <PackageCertificateKeyFile>InvadersUWP_MVVM_TemporaryKey.pfx</PackageCertificateKeyFile>
-    
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -90,12 +88,10 @@
     <Prefer32Bit>true</Prefer32Bit>
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
-
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -109,11 +105,35 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    
     <None Include="InvadersUWP_MVVM_TemporaryKey.pfx" />
-    
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\block.png" />
+    <Content Include="Assets\bug1.png" />
+    <Content Include="Assets\bug2.png" />
+    <Content Include="Assets\bug3.png" />
+    <Content Include="Assets\bug4.png" />
+    <Content Include="Assets\flyingsaucer1.png" />
+    <Content Include="Assets\flyingsaucer2.png" />
+    <Content Include="Assets\flyingsaucer3.png" />
+    <Content Include="Assets\flyingsaucer4.png" />
+    <Content Include="Assets\player.png" />
+    <Content Include="Assets\satellite1.png" />
+    <Content Include="Assets\satellite2.png" />
+    <Content Include="Assets\satellite3.png" />
+    <Content Include="Assets\satellite4.png" />
+    <Content Include="Assets\spaceship1.png" />
+    <Content Include="Assets\spaceship2.png" />
+    <Content Include="Assets\spaceship3.png" />
+    <Content Include="Assets\spaceship4.png" />
+    <Content Include="Assets\star1.png" />
+    <Content Include="Assets\star2.png" />
+    <Content Include="Assets\star3.png" />
+    <Content Include="Assets\star4.png" />
+    <Content Include="Assets\watchit1.png" />
+    <Content Include="Assets\watchit2.png" />
+    <Content Include="Assets\watchit3.png" />
+    <Content Include="Assets\watchit4.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -133,11 +153,14 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  
+  <ItemGroup>
+    <Folder Include="Model\" />
+    <Folder Include="ViewModel\" />
+    <Folder Include="View\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
-
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
