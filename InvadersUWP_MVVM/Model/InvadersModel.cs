@@ -170,6 +170,46 @@ namespace InvadersUWP_MVVM.Model
             CheckForInvaderCollisions();
         }
 
+        private void NextWave()
+        {
+            Wave++;
+            var invaders = _invaders.ToList();
+            foreach (var invader in invaders)
+                _invaders.Remove(invader);
+            for(int i = 0; i < 66; i++)
+            {
+                double newX;
+                double newY;
+                Invader newInvader;
+                if (i % 11 == 0)
+                {
+                    newX = _invaders.First().Location.X;
+                    newY = _invaders.First().Location.Y + 1.4 * Invader.InvaderSize.Height;
+                }
+                else
+                {
+                    newX = _invaders.Last().Location.X + 1.4 * Invader.InvaderSize.Width;
+                    newY = _invaders.Last().Location.Y;
+                }
+
+                Point newLocation = new Point(newX, newY);
+                Enums.InvaderType invaderType;
+                if (i < 11)
+                    invaderType = Enums.InvaderType.Spaceship;
+                else if (i < 22)
+                    invaderType = Enums.InvaderType.Bug;
+                else if (i < 33)
+                    invaderType = Enums.InvaderType.Saucer;
+                else if (i < 44)
+                    invaderType = Enums.InvaderType.Satellite;
+                else
+                    invaderType = Enums.InvaderType.Star;
+
+                newInvader = new Invader(newLocation, Invader.InvaderSize, invaderType);
+                _invaders.Add(newInvader);
+            }
+        }
+
         public event EventHandler<ShipChangedEventArgs> ShipChanged;
         private void OnShipChanged(Ship ship, bool killed)
         {
