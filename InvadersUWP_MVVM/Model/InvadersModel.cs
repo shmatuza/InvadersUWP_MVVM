@@ -49,25 +49,29 @@ namespace InvadersUWP_MVVM.Model
         public void StartGame()
         {
             GameOver = false;
-            foreach (var invader in _invaders)
+
+            var invaders = _invaders.ToList();
+            foreach (var invader in invaders)
             {
                 OnShipChanged(invader, true);
                 _invaders.Remove(invader);
             }
-            
-            foreach (var shot in _playerShots)
+
+            var playerShots = _playerShots.ToList();
+            foreach (var shot in playerShots)
             {
                 OnShotMoved(shot, true);
                 _playerShots.Remove(shot);
             }
 
-            foreach (var shot in _invaderShots)
+            var invaderShots = _invaderShots.ToList();
+            foreach (var shot in invaderShots)
             {
                 OnShotMoved(shot, true);
                 _invaderShots.Remove(shot);
             }
-
-            foreach (var star in _stars)
+            var stars = _stars.ToList();
+            foreach (var star in stars)
             {
                 OnStarChanged(star, true);
                 _stars.Remove(star);
@@ -84,6 +88,86 @@ namespace InvadersUWP_MVVM.Model
             Lives = 2;
             Wave = 0;
             NextWave();
+        }
+
+        public void FireShot()
+        {
+            if (_playerShots.Count < MaximumPlayerShots)
+            {
+                Shot newShot = new Shot(_player.Location, Enums.Direction.Up);
+                _playerShots.Add(newShot);
+                OnShotMoved(newShot, false);
+            }
+        }
+
+        public void MovePlayer(Enums.Direction direction)
+        {
+            if (Lives == 0)
+                return;
+            else
+            {
+                _player.Move(direction);
+                OnShipChanged(_player, false);
+            }
+        }
+
+        public void Twinkle()
+        {
+            if (_stars.Count < InitialStarCount * 1.5 && _stars.Count > InitialStarCount * 0.15)
+            {
+                if (_random.Next(2) == 0)
+                {
+                    Point newStar = new Point(_random.Next(400), _random.Next(300));
+                    _stars.Add(newStar);
+                    OnStarChanged(newStar, false);
+                }
+                else
+                {
+                    int starToRemoveIndex = _random.Next(_stars.Count);
+                    Point removedStar = _stars[starToRemoveIndex];
+                    _stars.Remove(removedStar);
+                    OnStarChanged(removedStar, true);
+                }
+            }    
+        }
+
+        public void Update()
+        {
+            if (GameOver == true)
+                return;
+            if (_invaders.Count == 0)
+                NextWave();
+
+            MoveInvaders();
+
+            var playerShots = _playerShots.ToList();
+            foreach(var shot in playerShots)
+            {
+                shot.Move();
+                if (shot.Location.Y > PlayAreaSize.Height)
+                {
+                    _playerShots.Remove(shot);
+                    OnShotMoved(shot, true);
+                }
+                else
+                    OnShotMoved(shot, false);
+            }
+
+            var invaderShots = _invaderShots.ToList();
+            foreach(var shot in invaderShots)
+            {
+                shot.Move();
+                if (shot.Location.Y > PlayAreaSize.Height)
+                {
+                    _invaderShots.Remove(shot);
+                    OnShotMoved(shot, true);
+                }
+                else
+                    OnShotMoved(shot, false);
+            }
+            ReturnFire();
+            CheckForPlayerCollisions();
+            CheckForInvaderCollisions();
         }
 
         public event EventHandler<ShipChangedEventArgs> ShipChanged;
