@@ -157,7 +157,7 @@ namespace InvadersUWP_MVVM.Model
             foreach(var shot in invaderShots)
             {
                 shot.Move();
-                if (shot.Location.Y > PlayAreaSize.Height)
+                if (shot.Location.Y < 0)
                 {
                     _invaderShots.Remove(shot);
                     OnShotMoved(shot, true);

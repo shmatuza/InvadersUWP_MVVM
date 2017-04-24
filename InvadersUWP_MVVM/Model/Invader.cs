@@ -32,7 +32,7 @@ namespace InvadersUWP_MVVM.Model
             switch (direction)
             {
                 case Enums.Direction.Left:
-                    if (Location.X <= InvadersModel.PlayAreaSize.Width - InvadersModel.PlayAreaSize.Width + 10)
+                    if (Location.X <= 10)
                         return;
                     Location = new Point(Location.X - 10, Location.Y);
                     break;
