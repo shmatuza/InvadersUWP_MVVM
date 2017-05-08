@@ -220,20 +220,49 @@ namespace InvadersUWP_MVVM.Model
 
         private void CheckForPlayerCollisions() //TODO: Collision method for player
         {
-            foreach(var shot in _invaderShots)
+            var invaderShots = _invaderShots;
+            foreach(var invaderShot in invaderShots)
             {
-                if (RectsOverlap(_player.Area, shot.Location))
+                if (RectsOverlap(_player.Area, invaderShot.Area))
+                {
+                    Lives--;
+                    _invaderShots.Remove(invaderShot);
+                    OnShotMoved(invaderShot, true);
+                }
             }
         }
 
-        private void CheckForInvaderCollisions() //TODO: Check collision for invaders
+        private void CheckForInvaderCollisions()
         {
+            var playerShots = _playerShots;
+            foreach(var playerShot in playerShots)
+            {
+                var hittedInvader = from invader in _invaders
+                                    where RectsOverlap(invader.Area, playerShot.Area)
+                                    select invader;
 
+                foreach (var invader in hittedInvader)
+                {
+                    _invaders.Remove(invader);
+                    OnShipChanged(invader, true);
+                    _playerShots.Remove(playerShot); //Might be an error
+                    OnShotMoved(playerShot, true);
+                }                               
+            }
+
+            foreach (var invader in _invaders)
+            {
+                if (invader.Location.Y <= _player.Location.Y)
+                {
+                    EndGame();
+                    return;
+                }
+            }
         }
 
         private void MoveInvaders()
         {
-            if (DateTime.Now.Second - _lastUpdated.Second < 3)
+            if (DateTime.Now.Second - _lastUpdated.Second < 2)
                 return;
 
             if (_invaderDirection == Enums.Direction.Right)
@@ -244,15 +273,21 @@ namespace InvadersUWP_MVVM.Model
                 if (closestInvader != null && _justMovedDown == false)
                 {
                     foreach (var invader in _invaders)
+                    {
                         invader.Move(Enums.Direction.Down);
+                        OnShipChanged(invader, false);
+                    }
                     _invaderDirection = Enums.Direction.Left;
                     _justMovedDown = true;
                 }
                 else
                 {
                     foreach (var invader in _invaders)
+                    {
                         invader.Move(Enums.Direction.Right);
-                    _justMovedDown = false;
+                        OnShipChanged(invader, false);
+                    }
+                        _justMovedDown = false;
                 }
             }
 
@@ -264,17 +299,36 @@ namespace InvadersUWP_MVVM.Model
                 if(closestInvader != null && _justMovedDown == false)
                 {
                     foreach (var invader in _invaders)
+                    {
                         invader.Move(Enums.Direction.Down);
+                        OnShipChanged(invader, false);
+                    }
                     _invaderDirection = Enums.Direction.Right;
                     _justMovedDown = true;
                 }
                 else
                 {
                     foreach (var invader in _invaders)
+                    {
                         invader.Move(Enums.Direction.Left);
+                        OnShipChanged(invader, false);
+                    }
                     _justMovedDown = false;
                 }
             }
+        }
+
+        private void ReturnFire()
+        {
+            if (_invaderShots.Count == Wave + 1 || _random.Next(10) < 10 - Wave)
+                return;
+
+            var shotGroup = _invaders.GroupBy(x => x.Location.X).OrderByDescending(x => x).Select(x => x).ToArray();
+            int randomNumber = shotGroup.Count();
+            Invader shotter = shotGroup[_random.Next(randomNumber)].Last();
+            Shot newShot = new Shot(shotter.Location, Enums.Direction.Down);
+            _invaderShots.Add(newShot);
+            OnShotMoved(newShot, false);
         }
 
         public event EventHandler<ShipChangedEventArgs> ShipChanged;
