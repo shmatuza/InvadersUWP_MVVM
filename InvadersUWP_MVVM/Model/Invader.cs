@@ -27,7 +27,7 @@ namespace InvadersUWP_MVVM.Model
             Score = score;
         }
 
-        public override void Move(Enums.Direction direction) //MEthod to check
+        public override void Move(Enums.Direction direction)
         {
             switch (direction)
             {
@@ -40,6 +40,7 @@ namespace InvadersUWP_MVVM.Model
                     break;
 
                 case Enums.Direction.Down:
+
                     Location = new Point(Location.X, Location.Y + 10);
                     break;
             }
