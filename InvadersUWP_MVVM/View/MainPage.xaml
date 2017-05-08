@@ -15,18 +15,22 @@
         <viewmodel:InvadersViewModel x:Name="viewModel"/>
     </Page.Resources>
 
-    <Grid Background="DarkBlue">
+    <Grid Background="DarkBlue" DataContext="{StaticResource viewModel}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" Margin="20" Grid.Row="0">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" Margin="10" Grid.Row="0">
             <TextBlock Text="{Binding Score}"/>
-            <GridView ></GridView>
+            <GridView ItemsSource="{Binding Lives}">
+                <DataTemplate>
+                    <Image/>
+                </DataTemplate>
+            </GridView>
         </StackPanel>
         <Border x:Name="playArea" BorderBrush="Blue" BorderThickness="2" CornerRadius="10" Background="Black" Margin="5"
                 Grid.Row="1" Loaded="playArea_Loaded">
-            <ItemsControl DataContext="{StaticResource viewModel}" ItemsSource="{Binding Path=Sprites}">
+            <ItemsControl ItemsSource="{Binding Path=Sprites}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas Background="White"/>
