@@ -210,6 +210,73 @@ namespace InvadersUWP_MVVM.Model
             }
         }
 
+        private static bool RectsOverlap(Rect r1, Rect r2)
+        {
+            r1.Intersect(r2);
+            if (r1.Width > 0 || r1.Height > 0)
+                return true;
+            return false;
+        }
+
+        private void CheckForPlayerCollisions() //TODO: Collision method for player
+        {
+            foreach(var shot in _invaderShots)
+            {
+                if (RectsOverlap(_player.Area, shot.Location))
+            }
+        }
+
+        private void CheckForInvaderCollisions() //TODO: Check collision for invaders
+        {
+
+        }
+
+        private void MoveInvaders()
+        {
+            if (DateTime.Now.Second - _lastUpdated.Second < 3)
+                return;
+
+            if (_invaderDirection == Enums.Direction.Right)
+            {
+                var closestInvader = from invader in _invaders
+                                     where invader.Area.Right >= (PlayAreaSize.Width - 2 * Invader.InvaderSize.Width)
+                                     select invader;
+                if (closestInvader != null && _justMovedDown == false)
+                {
+                    foreach (var invader in _invaders)
+                        invader.Move(Enums.Direction.Down);
+                    _invaderDirection = Enums.Direction.Left;
+                    _justMovedDown = true;
+                }
+                else
+                {
+                    foreach (var invader in _invaders)
+                        invader.Move(Enums.Direction.Right);
+                    _justMovedDown = false;
+                }
+            }
+
+            if(_invaderDirection == Enums.Direction.Left)
+            {
+                var closestInvader = from invader in _invaders
+                                     where invader.Area.Left <= (PlayAreaSize.Width - 2 * Invader.InvaderSize.Width)
+                                     select invader;
+                if(closestInvader != null && _justMovedDown == false)
+                {
+                    foreach (var invader in _invaders)
+                        invader.Move(Enums.Direction.Down);
+                    _invaderDirection = Enums.Direction.Right;
+                    _justMovedDown = true;
+                }
+                else
+                {
+                    foreach (var invader in _invaders)
+                        invader.Move(Enums.Direction.Left);
+                    _justMovedDown = false;
+                }
+            }
+        }
+
         public event EventHandler<ShipChangedEventArgs> ShipChanged;
         private void OnShipChanged(Ship ship, bool killed)
         {
