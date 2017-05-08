@@ -26,5 +26,30 @@ namespace InvadersUWP_MVVM
         {
             this.InitializeComponent();
         }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+        }
+
+        private void Page_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+
+        }
+
+        private void Page_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+
+        }
+
+        private void Page_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
+        }
+
+        private void playArea_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

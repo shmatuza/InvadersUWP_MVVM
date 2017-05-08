@@ -5,7 +5,34 @@
     xmlns:local="using:InvadersUWP_MVVM"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    xmlns:viewmodel="using:InvadersUWP_MVVM.ViewModel"
+    SizeChanged="Page_SizeChanged"
+    ManipulationMode="TranslateX" ManipulationDelta="Page_ManipulationDelta"
+    ManipulationCompleted="Page_ManipulationCompleted" Tapped="Page_Tapped">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
+    <Page.Resources>
+        <viewmodel:InvadersViewModel x:Name="viewModel"/>
+    </Page.Resources>
+
+    <Grid Background="DarkBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" Margin="20" Grid.Row="0">
+            <TextBlock Text="{Binding Score}"/>
+            <GridView ></GridView>
+        </StackPanel>
+        <Border x:Name="playArea" BorderBrush="Blue" BorderThickness="2" CornerRadius="10" Background="Black" Margin="5"
+                Grid.Row="1" Loaded="playArea_Loaded">
+            <ItemsControl DataContext="{StaticResource viewModel}" ItemsSource="{Binding Path=Sprites}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="White"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Border>
+    </Grid>
 </Page>
