@@ -218,7 +218,7 @@ namespace InvadersUWP_MVVM.Model
             return false;
         }
 
-        private void CheckForPlayerCollisions() //TODO: Collision method for player
+        private void CheckForPlayerCollisions()
         {
             var invaderShots = _invaderShots;
             foreach(var invaderShot in invaderShots)
