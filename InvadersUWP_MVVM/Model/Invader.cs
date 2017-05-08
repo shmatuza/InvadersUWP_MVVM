@@ -40,7 +40,6 @@ namespace InvadersUWP_MVVM.Model
                     break;
 
                 case Enums.Direction.Down:
-
                     Location = new Point(Location.X, Location.Y + 10);
                     break;
             }
