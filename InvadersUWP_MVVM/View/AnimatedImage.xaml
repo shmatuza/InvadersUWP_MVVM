@@ -9,18 +9,20 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <UserControl.Resources>
-        <Storyboard x:Name="invaderShotStoryboard">
-            <DoubleAnimation From="1" To="0" Storyboard.TargetName="invaderShot"
-                             Storyboard.TargetProperty="Opacity" Duration="0:0:1"/>
-        </Storyboard>
-        <Storyboard x:Name="flashStoryboard">
-            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility"  Duration="0:0:1"
-                                           Storyboard.TargetName="playerShip"/>
-        </Storyboard>
-    </UserControl.Resources>
-
     <Grid>
+        <Grid.Resources>
+            <Storyboard x:Name="invaderShotStoryboard">
+                <DoubleAnimation From="1" To="0" Storyboard.TargetName="invaderShot"
+                             Storyboard.TargetProperty="Opacity" Duration="0:0:0.5"/>
+            </Storyboard>
+            <Storyboard x:Name="flashStoryboard">
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="image" Storyboard.TargetProperty="Visibility" RepeatBehavior="Forever">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Visible"/>
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0.4" Value="Collapsed"/>
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0.8" Value="Visible"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+        </Grid.Resources>
         <Image x:Name="image" Stretch="Fill"/>
     </Grid>
 </UserControl>
