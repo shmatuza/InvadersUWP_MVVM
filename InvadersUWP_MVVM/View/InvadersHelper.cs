@@ -9,6 +9,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
 
@@ -66,6 +67,16 @@ namespace InvadersUWP_MVVM.View
             return shotControl;
         }
 
+        internal static FrameworkElement PlayerControlFactory(Player player, double scale)
+        {
+            AnimatedImage playerControl = new AnimatedImage(new List<string> { "player.png" }, TimeSpan.FromSeconds(.75));
+            playerControl.Width = player.Size.Width * scale;
+            playerControl.Height = player.Size.Height * scale;
+            SetCanvasLocation(playerControl, player.Location.X * scale, player.Location.Y * scale);
+
+            return playerControl;
+        }
+
         internal static FrameworkElement StarFactory(Point point, double scale)
         {
             FrameworkElement star;
@@ -92,18 +103,6 @@ namespace InvadersUWP_MVVM.View
             Canvas.SetZIndex(star, -1000);
             return star;
         }
-
-        internal static FrameworkElement ScanLineFactory(int y, int width, double scale)
-        {
-            FrameworkElement scanLine = new Rectangle();
-            scanLine.Width = width * scale;
-            scanLine.Height = 2;
-            scanLine.Opacity = .5;
-            ((Rectangle)scanLine).Fill = new SolidColorBrush(Colors.White);
-            SetCanvasLocation(scanLine, 0, y * scale);
-            return scanLine;
-        }
-
         private static Color RandomStarColor()
         {
             switch (_random.Next(6))
@@ -123,6 +122,41 @@ namespace InvadersUWP_MVVM.View
             }
         }
 
+        internal static FrameworkElement ScanLineFactory(int y, int width, double scale)
+        {
+            FrameworkElement scanLine = new Rectangle();
+            scanLine.Width = width * scale;
+            scanLine.Height = 2;
+            scanLine.Opacity = .5;
+            ((Rectangle)scanLine).Fill = new SolidColorBrush(Colors.White);
+            SetCanvasLocation(scanLine, 0, y * scale);
+            return scanLine;
+        }
+
+        public static DoubleAnimation CreateDoubleAnimation(FrameworkElement frameworkElement, double fromX, double toY, 
+            string propertyToAnimate)
+        {
+            DoubleAnimation animation = new DoubleAnimation();
+            Storyboard.SetTarget(animation, frameworkElement);
+            Storyboard.SetTargetProperty(animation, propertyToAnimate);
+            animation.From = fromX;
+            animation.To = toY;
+            animation.Duration = TimeSpan.FromMilliseconds(25);
+            return animation;
+        }
+
+        public static void MoveElementOnCanvas(FrameworkElement frameworkElement, double toX, double toY)
+        {
+            double fromX = Canvas.GetLeft(frameworkElement);
+            double fromY = Canvas.GetTop(frameworkElement);
+
+            Storyboard storyboard = new Storyboard();
+            DoubleAnimation animationX = CreateDoubleAnimation(frameworkElement, fromX, toX, "(Canvas.Left)");
+            DoubleAnimation animationY = CreateDoubleAnimation(frameworkElement, fromY, toY, "(Canvas.Top)");
+            storyboard.Children.Add(animationX);
+            storyboard.Children.Add(animationY);
+            storyboard.Begin();
+        }
         public static BitmapImage CreateImageFromAssets(string imageFilename)
         {
             return new BitmapImage(new Uri("ms-appx:///Assets/" + imageFilename));
