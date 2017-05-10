@@ -13,30 +13,52 @@
 
     <Page.Resources>
         <viewmodel:InvadersViewModel x:Name="viewModel"/>
+        <viewmodel:BooleanVisibilityConverter x:Name="visibilityConverter"/>
     </Page.Resources>
 
-    <Grid Background="DarkBlue" DataContext="{StaticResource viewModel}">
+    <Grid DataContext="{StaticResource viewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" Margin="10" Grid.Row="0">
-            <TextBlock Text="{Binding Score}"/>
-            <GridView ItemsSource="{Binding Lives}">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" Margin="0,0,120,0" Grid.Row="0">
+            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="{Binding Score}" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+            <GridView ItemsSource="{Binding Lives}" HorizontalAlignment="Right" Width="Auto" Height="50" SelectionMode="None">
                 <DataTemplate>
-                    <Image/>
+                    <Image Source="ms-appx:///Assets/player.png" Stretch="Fill" Height="15" Width="20"/>
                 </DataTemplate>
             </GridView>
         </StackPanel>
+        
         <Border x:Name="playArea" BorderBrush="Blue" BorderThickness="2" CornerRadius="10" Background="Black" Margin="5"
                 Grid.Row="1" Loaded="playArea_Loaded">
-            <ItemsControl ItemsSource="{Binding Path=Sprites}">
+            <ItemsControl ItemsSource="{Binding Path=Sprites}" Margin="5">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas Background="White"/>
+                        <Canvas Background="Black"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </Border>
+
+
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Visibility="{Binding GameOver, Converter={StaticResource visibilityConverter}}" >
+
+            <TextBlock Grid.Row="1" Text="Game Over" VerticalAlignment="Center" 
+                       FontFamily="Arial Narrow" FontSize="150"
+                       Foreground="Red" FontWeight="ExtraBold" FontStyle="Italic"
+                       Margin="0,0,0,60" 
+                       />
+
+            <Button Content="Start a new game" Background="DarkGray"
+                    HorizontalAlignment="Center" FontSize="30" Click="StartButtonClick"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="1" Text="Paused" VerticalAlignment="Center" 
+                   FontFamily="Arial Narrow" FontSize="60"
+                   Foreground="Yellow" FontWeight="ExtraBold" FontStyle="Italic"
+                   Margin="120,0,0,60" 
+                   Visibility="{Binding Paused, Converter={StaticResource visibilityConverter}}"/>
     </Grid>
 </Page>
