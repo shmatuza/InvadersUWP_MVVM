@@ -12,8 +12,9 @@
     ManipulationCompleted="Page_ManipulationCompleted" Tapped="Page_Tapped">
 
     <Page.Resources>
-        <viewmodel:InvadersViewModel x:Name="viewModel"/>
         <viewmodel:BooleanVisibilityConverter x:Name="visibilityConverter"/>
+        <viewmodel:BooleanNotConverter x:Name="notConverter"/>
+        <viewmodel:InvadersViewModel x:Name="viewModel"/>
     </Page.Resources>
 
     <Grid DataContext="{StaticResource viewModel}">
@@ -29,7 +30,7 @@
                 </DataTemplate>
             </GridView>
         </StackPanel>
-        
+
         <Border x:Name="playArea" BorderBrush="Blue" BorderThickness="2" CornerRadius="10" Background="Black" Margin="5"
                 Grid.Row="1" Loaded="playArea_Loaded">
             <ItemsControl ItemsSource="{Binding Path=Sprites}" Margin="5">
@@ -40,7 +41,6 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </Border>
-
 
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Visibility="{Binding GameOver, Converter={StaticResource visibilityConverter}}" >
@@ -60,5 +60,24 @@
                    Foreground="Yellow" FontWeight="ExtraBold" FontStyle="Italic"
                    Margin="120,0,0,60" 
                    Visibility="{Binding Paused, Converter={StaticResource visibilityConverter}}"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <AppBarButton Click="AboutButtonClick" Icon="Bookmarks" Label="About"/>
+            <AppBarButton Click="PauseButtonClick" Icon="Pause" Label="Pause"
+                        IsEnabled="{Binding GameOver, Converter={StaticResource notConverter}}"/>
+            <AppBarButton Click="StartButtonClick" Icon="Refresh" Label="Restart"/>
+        </StackPanel>
+
+        <Popup x:Name="aboutPopup" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Right" 
+               Width="400" IsOpen="False">
+            <StackPanel Background="BlanchedAlmond" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                        Width="360" Margin="20">
+                <TextBlock Text="Invaders" FontSize="60" Foreground="Yellow" FontFamily="Arial Narrow"
+                           FontWeight="ExtraBold" FontStyle="Italic" VerticalAlignment="Center"/>
+                <TextBlock Text="Project made by Damian Matusek"/>
+                <Button Click="ClosePopupButtonClick" Content="Close Popup"/>
+            </StackPanel>
+        </Popup>
+
     </Grid>
 </Page>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InvadersUWP_MVVM.ViewModel
 {
-    class InvadersViewModel
+    public class InvadersViewModel
     {
     }
 }

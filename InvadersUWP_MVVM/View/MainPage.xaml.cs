@@ -28,6 +28,11 @@ namespace InvadersUWP_MVVM
             this.InitializeComponent();
         }
 
+        private void StartButtonClick(object sender, RoutedEventArgs e)
+        {
+            viewModel.StartGame();
+        }
+
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             UpdatePlayAreaSize(new Size(e.NewSize.Width, e.NewSize.Height - 160));
@@ -102,6 +107,26 @@ namespace InvadersUWP_MVVM
         private void KeyUpHandler(object sender, KeyEventArgs e)
         {
             viewModel.KeyUp(e.VirtualKey);
+        }
+
+        private void PauseButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (viewModel.Paused == true)
+                viewModel.Paused = false;
+            else
+                viewModel.Paused = true;
+        }
+
+        private void AboutButtonClick(object sender, RoutedEventArgs e)
+        {
+            aboutPopup.IsOpen = true;
+            viewModel.Paused = true;
+        }
+
+        private void ClosePopupButtonClick(object sender, RoutedEventArgs e)
+        {
+            aboutPopup.IsOpen = false;
+            viewModel.Paused = false;
         }
     }
 }
