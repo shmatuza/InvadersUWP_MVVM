@@ -31,6 +31,7 @@ namespace InvadersUWP_MVVM
         private void StartButtonClick(object sender, RoutedEventArgs e)
         {
             viewModel.StartGame();
+            aboutPopup.IsOpen = false;
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
