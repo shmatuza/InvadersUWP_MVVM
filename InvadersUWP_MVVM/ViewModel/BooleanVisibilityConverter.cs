@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Data;
 
 namespace InvadersUWP_MVVM.ViewModel
 {
-    class BooleanVisibilityConverter : IValueConverter
+    public class BooleanVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
