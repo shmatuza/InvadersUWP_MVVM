@@ -2,4 +2,4 @@ Projekt na zaliczenie Akademii C# grupa zaawansowana 2017.
 Wykonanie: Damian Matusek
 Opis: Gra Invaders bazująca na pierwowzorze z lat '80
 Projekt wykonany będzie na Universal Windows Platform, wykorzystując wzorzec MVVM,
-jeśli będę miał więcej czasu projekt chciałbym wykonać również w Xamarinie.
+Kilka typów wrogów, score, obsługa gestów.
