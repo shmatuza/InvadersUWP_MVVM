@@ -78,7 +78,7 @@ namespace InvadersUWP_MVVM.Model
             }
 
             for (int i = 0; i < InitialStarCount; i++)
-                _stars.Add(new Point(_random.Next(400), _random.Next(300)));
+                _stars.Add(new Point(_random.Next((int)PlayAreaSize.Width), _random.Next(20, (int)PlayAreaSize.Height) - 20));
             foreach (var star in _stars)
                 OnStarChanged(star, false);
 
@@ -131,43 +131,47 @@ namespace InvadersUWP_MVVM.Model
             }    
         }
 
-        public void Update()
+        public void Update(bool paused)
         {
-            if (GameOver == true)
-                return;
-            if (_invaders.Count == 0)
-                NextWave();
-
-            MoveInvaders();
-
-            var playerShots = _playerShots.ToList();
-            foreach(var shot in playerShots)
+            if (!paused)
             {
-                shot.Move();
-                if (shot.Location.Y > PlayAreaSize.Height)
-                {
-                    _playerShots.Remove(shot);
-                    OnShotMoved(shot, true);
-                }
-                else
-                    OnShotMoved(shot, false);
-            }
+                if (GameOver == true)
+                    return;
+                if (_invaders.Count == 0)
+                    NextWave();
 
-            var invaderShots = _invaderShots.ToList();
-            foreach(var shot in invaderShots)
-            {
-                shot.Move();
-                if (shot.Location.Y < 0)
+                MoveInvaders();
+
+                var playerShots = _playerShots.ToList();
+                foreach (var shot in playerShots)
                 {
-                    _invaderShots.Remove(shot);
-                    OnShotMoved(shot, true);
+                    shot.Move();
+                    if (shot.Location.Y > PlayAreaSize.Height)
+                    {
+                        _playerShots.Remove(shot);
+                        OnShotMoved(shot, true);
+                    }
+                    else
+                        OnShotMoved(shot, false);
                 }
-                else
-                    OnShotMoved(shot, false);
+
+                var invaderShots = _invaderShots.ToList();
+                foreach (var shot in invaderShots)
+                {
+                    shot.Move();
+                    if (shot.Location.Y < 0)
+                    {
+                        _invaderShots.Remove(shot);
+                        OnShotMoved(shot, true);
+                    }
+                    else
+                        OnShotMoved(shot, false);
+                }
+                ReturnFire();
+                CheckForPlayerCollisions();
+                CheckForInvaderCollisions();
             }
-            ReturnFire();
-            CheckForPlayerCollisions();
-            CheckForInvaderCollisions();
+            Twinkle();
         }
 
         private void NextWave()
