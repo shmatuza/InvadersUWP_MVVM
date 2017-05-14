@@ -40,7 +40,7 @@ namespace InvadersUWP_MVVM.ViewModel
             set
             {
                 Scale = value.Width / 405;
-                _model.Update();
+                _model.Update(Paused);
                 RecreateScanLines();
             }
         }
@@ -79,7 +79,33 @@ namespace InvadersUWP_MVVM.ViewModel
                 else if (_rightAction.HasValue)
                     _model.MovePlayer(Enums.Direction.Right);
             }
+            _model.Update(Paused);
+            if (Score != _model.Score)
+            {
+                Score = _model.Score;
+                OnPropertyChanged("Score");
+            }
+            if(_lives.Count != _model.Lives)
+            {
+                _lives.Clear();
+                for (int i = 0; i < _model.Lives; i++)
+                    _lives.Add(new object());
+            }
 
+            foreach (FrameworkElement control in _shotInvaders.Keys.ToList())
+            {
+                DateTime elapsed = _shotInvaders[control];
+                if (DateTime.Now - elapsed > TimeSpan.FromMilliseconds(50))
+                {
+                    _sprites.Remove(control);
+                    _shotInvaders.Remove(control);
+                }
+            }
+            if (_model.GameOver)
+            {
+                OnPropertyChanged("GameOver");
+                _timer.Stop();
+            }
         }
 
         public void StartGame()
