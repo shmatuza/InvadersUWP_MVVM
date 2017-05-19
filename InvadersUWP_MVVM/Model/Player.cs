@@ -9,13 +9,12 @@ namespace InvadersUWP_MVVM.Model
 {
     class Player : Ship
     {
-        public static Size PlayerSize { get; private set; }
+        public static readonly Size PlayerSize = new Size(25, 15);
         private const double _speed = 10;
 
-        public Player(Point location, Size size) : base(location, size)
+        public Player() : base(new Point(PlayerSize.Width, InvadersModel.PlayAreaSize.Height - InvadersModel.PlayAreaSize.Height * 3), PlayerSize)
         {
-            Location = location;
-            PlayerSize = size;
+            Location = new Point(Location.X, InvadersModel.PlayAreaSize.Height - PlayerSize.Height * 3);
         }
 
         public override void Move(Enums.Direction direction) //TODO: Check for extending game area size

@@ -12,7 +12,7 @@
     <Grid>
         <Grid.Resources>
             <Storyboard x:Name="invaderShotStoryboard">
-                <DoubleAnimation From="1" To="0" Storyboard.TargetName="invaderShot"
+                <DoubleAnimation From="1" To="0" Storyboard.TargetName="image"
                              Storyboard.TargetProperty="Opacity" Duration="0:0:0.5"/>
             </Storyboard>
             <Storyboard x:Name="flashStoryboard">

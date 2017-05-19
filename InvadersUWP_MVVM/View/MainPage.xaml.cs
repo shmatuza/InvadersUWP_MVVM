@@ -30,8 +30,9 @@ namespace InvadersUWP_MVVM
 
         private void StartButtonClick(object sender, RoutedEventArgs e)
         {
-            viewModel.StartGame();
             aboutPopup.IsOpen = false;
+            viewModel.StartGame();
+            firstTapOfGame = true;
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -53,9 +54,13 @@ namespace InvadersUWP_MVVM
             viewModel.RightGestureCompleted();
         }
 
+        bool firstTapOfGame = false;
         private void Page_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            viewModel.Tapped();
+            if (!firstTapOfGame)
+                viewModel.Tapped();
+
+            firstTapOfGame = false;
         }
 
         private void playArea_Loaded(object sender, RoutedEventArgs e)

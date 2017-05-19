@@ -40,7 +40,7 @@ namespace InvadersUWP_MVVM.ViewModel
             set
             {
                 Scale = value.Width / 405;
-                _model.Update(Paused);
+                _model.UpdateAllShipsAndStars();
                 RecreateScanLines();
             }
         }
