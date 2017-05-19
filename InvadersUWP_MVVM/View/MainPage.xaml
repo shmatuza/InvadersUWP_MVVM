@@ -22,9 +22,9 @@
             <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" Margin="0,0,120,0" Grid.Row="0">
-            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="{Binding Score}" HorizontalAlignment="Right" Margin="0,0,15,0"/>
-            <GridView ItemsSource="{Binding Lives}" HorizontalAlignment="Right" Width="Auto" Height="60" SelectionMode="None">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5" Grid.Row="0">
+            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="{Binding Score}" HorizontalAlignment="Center" Margin="0,0,15,0" FontFamily="Showcard Gothic"/>
+            <GridView ItemsSource="{Binding Lives}" HorizontalAlignment="Center" Width="Auto" Height="60" SelectionMode="None">
                 <GridView.ItemTemplate>
                 <DataTemplate>
                     <Image Source="ms-appx:///Assets/player.png" Stretch="Fill" Height="15" Width="20"/>
@@ -44,17 +44,17 @@
             </ItemsControl>
         </Border>
 
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
                     Visibility="{Binding GameOver, Converter={StaticResource visibilityConverter}}" >
 
             <TextBlock Grid.Row="1" Text="Game Over" VerticalAlignment="Center" 
-                       FontFamily="Arial Narrow" FontSize="100"
+                       FontFamily="Showcard Gothic" FontSize="100"
                        Foreground="Red" FontWeight="ExtraBold" FontStyle="Italic"
                        Margin="0,0,0,60" 
                        />
 
-            <Button Content="Start a new game" Background="DarkGray"
-                    HorizontalAlignment="Center" FontSize="30" Click="StartButtonClick"/>
+            <Button Content="Start a new game" FontFamily="Showcard Gothic" Background="Black" Foreground="Gainsboro"
+                    HorizontalAlignment="Center" FontSize="30" Click="StartButtonClick" RequestedTheme="Dark"/>
         </StackPanel>
 
         <TextBlock Grid.Row="1" Text="Paused" VerticalAlignment="Center" 
