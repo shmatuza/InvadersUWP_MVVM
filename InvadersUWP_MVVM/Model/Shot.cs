@@ -23,7 +23,7 @@ namespace InvadersUWP_MVVM.Model
         public Shot(Point location, Enums.Direction direction)
         {
             Location = location;
-            _direction = direction;
+            Direction = direction;
             _lastMoved = DateTime.Now;
         }
 

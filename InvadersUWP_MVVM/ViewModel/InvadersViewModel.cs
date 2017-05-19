@@ -124,7 +124,7 @@ namespace InvadersUWP_MVVM.ViewModel
                     else
                     {
                         FrameworkElement invaderControl = _invaders[invader];
-                        InvadersHelper.SetCanvasLocation(invaderControl, invader.Location.X, invader.Location.Y);
+                        InvadersHelper.SetCanvasLocation(invaderControl, invader.Location.X * Scale, invader.Location.Y * Scale);
                         InvadersHelper.ResizeElement(invaderControl, invader.Size.Width * Scale, invader.Size.Height * Scale);
                     }
                 }

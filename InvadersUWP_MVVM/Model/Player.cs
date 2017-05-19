@@ -17,19 +17,17 @@ namespace InvadersUWP_MVVM.Model
             Location = new Point(Location.X, InvadersModel.PlayAreaSize.Height - PlayerSize.Height * 3);
         }
 
-        public override void Move(Enums.Direction direction) //TODO: Check for extending game area size
+        public override void Move(Enums.Direction direction)
         {
             switch (direction)
             {
                 case Enums.Direction.Left:
-                    if (Location.X <= 10)
-                        return;
-                    Location = new Point(Location.X - _speed, Location.Y);
+                    if (Location.X > PlayerSize.Width)
+                        Location = new Point(Location.X - 10, Location.Y);
                     break;
-                case Enums.Direction.Right:
-                    if (Location.X >= InvadersModel.PlayAreaSize.Width - 10)
-                        return;
-                    Location = new Point(Location.X + _speed, Location.Y);
+                default:
+                    if (Location.X < InvadersModel.PlayAreaSize.Width - PlayerSize.Width * 2)
+                        Location = new Point(Location.X + 10, Location.Y);
                     break;
             }
         }
