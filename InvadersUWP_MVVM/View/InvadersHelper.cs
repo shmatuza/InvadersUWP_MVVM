@@ -167,5 +167,13 @@ namespace InvadersUWP_MVVM.View
             Canvas.SetLeft(control, x);
             Canvas.SetTop(control, y);
         }
+
+        public static void ResizeElement(FrameworkElement control, double width, double height)
+        {
+            if (control.Width != width)
+                control.Width = width;
+            if (control.Height != height)
+                control.Height = height;
+        }
     }
 }

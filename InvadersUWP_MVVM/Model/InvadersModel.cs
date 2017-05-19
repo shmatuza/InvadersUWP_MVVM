@@ -177,40 +177,32 @@ namespace InvadersUWP_MVVM.Model
         private void NextWave()
         {
             Wave++;
-            var invaders = _invaders.ToList();
-            foreach (var invader in invaders)
-                _invaders.Remove(invader);
-            for(int i = 0; i < 66; i++)
-            {
-                double newX;
-                double newY;
-                Invader newInvader;
-                if (i % 11 == 0)
+            _invaders.Clear();
+            for(int row = 0; row < 5; row++)
+                for(int column = 0; column < 66; column++)
                 {
-                    newX = _invaders.First().Location.X;
-                    newY = _invaders.First().Location.Y + 1.4 * Invader.InvaderSize.Height;
-                }
-                else
-                {
-                    newX = _invaders.Last().Location.X + 1.4 * Invader.InvaderSize.Width;
-                    newY = _invaders.Last().Location.Y;
-                }
-
-                Point newLocation = new Point(newX, newY);
-                Enums.InvaderType invaderType;
-                if (i < 11)
-                    invaderType = Enums.InvaderType.Spaceship;
-                else if (i < 22)
-                    invaderType = Enums.InvaderType.Bug;
-                else if (i < 33)
-                    invaderType = Enums.InvaderType.Saucer;
-                else if (i < 44)
-                    invaderType = Enums.InvaderType.Satellite;
-                else
-                    invaderType = Enums.InvaderType.Star;
-
-                newInvader = new Invader(newLocation, Invader.InvaderSize, invaderType);
-                _invaders.Add(newInvader);
+                    Point location = new Point(column * Invader.InvaderSize.Width * 1.4, row * Invader.InvaderSize.Height * 1.4);
+                    Invader newInvader;
+                    switch(row)
+                    {
+                        case 0:
+                            newInvader = new Invader(location, Invader.InvaderSize, Enums.InvaderType.Spaceship, 50);
+                            break;
+                        case 1:
+                            newInvader = new Invader(location, Invader.InvaderSize, Enums.InvaderType.Bug, 40);
+                            break;
+                        case 2:
+                            newInvader = new Invader(location, Invader.InvaderSize, Enums.InvaderType.Saucer, 30);
+                            break;
+                        case 3:
+                            newInvader = new Invader(location, Invader.InvaderSize, Enums.InvaderType.Satellite, 20);
+                            break;
+                        default:
+                            newInvader = new Invader(location, Invader.InvaderSize, Enums.InvaderType.Star, 10);
+                            break;
+                    }
+                    _invaders.Add(newInvader);
+                    OnShipChanged(newInvader, false);
             }
         }
 
