@@ -14,8 +14,6 @@ namespace InvadersUWP_MVVM.Model
         public Point Location { get; private set; }
         public static Size ShotSize = new Size(2, 10);
         public Rect Area { get { return new Rect(Location, ShotSize); } }
-
-        private Enums.Direction _direction;
         public Enums.Direction Direction { get; private set; }
 
         private DateTime _lastMoved;

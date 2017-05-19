@@ -371,25 +371,19 @@ namespace InvadersUWP_MVVM.Model
         public event EventHandler<ShipChangedEventArgs> ShipChanged;
         private void OnShipChanged(Ship ship, bool killed)
         {
-            EventHandler<ShipChangedEventArgs> shipChanged = ShipChanged;
-            if (shipChanged != null)
-                shipChanged(this, new ShipChangedEventArgs(ship, killed));
+            ShipChanged?.Invoke(this, new ShipChangedEventArgs(ship, killed));
         }
 
         public event EventHandler<ShotMovedEventArgs> ShotMoved;
         private void OnShotMoved(Shot shot, bool disappeared)
         {
-            EventHandler<ShotMovedEventArgs> shotMoved = ShotMoved;
-            if (shotMoved != null)
-                shotMoved(this, new ShotMovedEventArgs(shot, disappeared));
+            ShotMoved?.Invoke(this, new ShotMovedEventArgs(shot, disappeared));
         }
 
         public event EventHandler<StarChangedEventArgs> StarChanged;
         private void OnStarChanged(Point point, bool disappeared)
         {
-            EventHandler<StarChangedEventArgs> starChanged = StarChanged;
-            if (starChanged != null)
-                starChanged(this, new StarChangedEventArgs(point, disappeared));
+            StarChanged?.Invoke(this, new StarChangedEventArgs(point, disappeared));
         }
     }
 }

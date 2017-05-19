@@ -22,13 +22,14 @@ namespace InvadersUWP_MVVM.Model
             switch (direction)
             {
                 case Enums.Direction.Left:
-                    if (Location.X > PlayerSize.Width)
+                    if (Location.X > PlayerSize.Width / 2)
                         Location = new Point(Location.X - 10, Location.Y);
                     break;
-                default:
-                    if (Location.X < InvadersModel.PlayAreaSize.Width - PlayerSize.Width * 2)
+                case Enums.Direction.Right:
+                    if (Location.X < InvadersModel.PlayAreaSize.Width - PlayerSize.Width * 1.5)
                         Location = new Point(Location.X + 10, Location.Y);
                     break;
+                default: break;
             }
         }
     }

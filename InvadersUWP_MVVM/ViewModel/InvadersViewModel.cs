@@ -11,6 +11,7 @@ using Windows.Foundation;
 using DispatcherTimer = Windows.UI.Xaml.DispatcherTimer;
 using FrameworkElement = Windows.UI.Xaml.FrameworkElement;
 using System.ComponentModel;
+using Windows.System;
 
 namespace InvadersUWP_MVVM.ViewModel
 {
@@ -27,7 +28,6 @@ namespace InvadersUWP_MVVM.ViewModel
         private readonly Dictionary<FrameworkElement, DateTime> _shotInvaders = new Dictionary<FrameworkElement, DateTime>();
         private readonly Dictionary<Shot, FrameworkElement> _shots = new Dictionary<Shot, FrameworkElement>();
         private readonly Dictionary<Point, FrameworkElement> _stars = new Dictionary<Point, FrameworkElement>();
-        private readonly List<FrameworkElement> _scanLines = new List<FrameworkElement>();
 
         public INotifyCollectionChanged Sprites { get { return _sprites; } }
         public bool GameOver { get { return _model.GameOver; } }
@@ -41,7 +41,6 @@ namespace InvadersUWP_MVVM.ViewModel
             {
                 Scale = value.Width / 405;
                 _model.UpdateAllShipsAndStars();
-                RecreateScanLines();
             }
         }
 
@@ -67,9 +66,9 @@ namespace InvadersUWP_MVVM.ViewModel
             }
             if (!Paused)
             {
-                if (_leftAction.HasValue && _rightAction.HasValue)
+                if (_leftAction != null && _rightAction != null)
                 {
-                    if (_leftAction.Value > _rightAction.Value)
+                    if (DateTime.Compare((DateTime)_leftAction, (DateTime)_rightAction) > 0)
                         _model.MovePlayer(Enums.Direction.Left);
                     else
                         _model.MovePlayer(Enums.Direction.Right);
@@ -233,20 +232,6 @@ namespace InvadersUWP_MVVM.ViewModel
             _timer.Start();
         }
 
-        private void RecreateScanLines()
-        {
-            foreach (FrameworkElement scanLine in _scanLines)
-                if (_sprites.Contains(scanLine))
-                    _sprites.Remove(scanLine);
-            _scanLines.Clear();
-            for (int y = 0; y < 300; y += 2)
-            {
-                FrameworkElement scanLine = InvadersHelper.ScanLineFactory(y, 400, Scale);
-                _scanLines.Add(scanLine);
-                _sprites.Add(scanLine);
-            }
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
@@ -259,23 +244,23 @@ namespace InvadersUWP_MVVM.ViewModel
         private DateTime? _leftAction = null;
         private DateTime? _rightAction = null;
 
-        internal void KeyDown(Windows.System.VirtualKey virtualKey)
+        internal void KeyDown(VirtualKey virtualKey)
         {
-            if (virtualKey == Windows.System.VirtualKey.Space)
+            if (virtualKey == VirtualKey.Space)
                 _model.FireShot();
 
-            if (virtualKey == Windows.System.VirtualKey.Left)
+            if (virtualKey == VirtualKey.Left)
                 _leftAction = DateTime.Now;
 
-            if (virtualKey == Windows.System.VirtualKey.Right)
-                _leftAction = DateTime.Now;
+            if (virtualKey == VirtualKey.Right)
+                _rightAction = DateTime.Now;
         }
-        internal void KeyUp(Windows.System.VirtualKey virtualKey)
+        internal void KeyUp(VirtualKey virtualKey)
         {
-            if (virtualKey == Windows.System.VirtualKey.Left)
+            if (virtualKey == VirtualKey.Left)
                 _leftAction = null;
 
-            if (virtualKey == Windows.System.VirtualKey.Right)
+            if (virtualKey == VirtualKey.Right)
                 _rightAction = null;
         }
         internal void LeftGestureStarted()

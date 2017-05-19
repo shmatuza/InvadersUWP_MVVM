@@ -17,15 +17,14 @@
         <viewmodel:InvadersViewModel x:Name="viewModel"/>
     </Page.Resources>
 
-    <Grid DataContext="{StaticResource viewModel}">
+    <Grid DataContext="{StaticResource viewModel}" Background="Gainsboro">
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" Margin="5" Grid.Row="0">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" Margin="0,0,120,0" Grid.Row="0">
             <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="{Binding Score}" HorizontalAlignment="Right" Margin="0,0,15,0"/>
-            <GridView ItemsSource="{Binding Lives}" HorizontalAlignment="Right" Width="Auto" Height="50" SelectionMode="None">
+            <GridView ItemsSource="{Binding Lives}" HorizontalAlignment="Right" Width="Auto" Height="60" SelectionMode="None">
                 <GridView.ItemTemplate>
                 <DataTemplate>
                     <Image Source="ms-appx:///Assets/player.png" Stretch="Fill" Height="15" Width="20"/>
@@ -74,12 +73,16 @@
                 <Button Click="ClosePopupButtonClick" Content="Close Popup"/>
             </StackPanel>
         </Popup>    
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-        <AppBarButton Click="AboutButtonClick" Icon="Bookmarks" Label="About"/>
-        <AppBarButton Click="PauseButtonClick" Icon="Pause" Label="Pause"
-                        IsEnabled="{Binding GameOver, Converter={StaticResource notConverter}}"/>
-        <AppBarButton Click="StartButtonClick" Icon="Refresh" Label="Restart"/>
-    </StackPanel>
+        
     </Grid>
-
+    <Page.BottomAppBar>
+        <AppBar x:Name="appBar">
+            <StackPanel  DataContext="{StaticResource viewModel}" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                <AppBarButton Click="AboutButtonClick" Icon="Bookmarks" Label="About"/>
+                <AppBarButton Click="PauseButtonClick" Icon="Pause" Label="Pause"
+                        IsEnabled="{Binding GameOver, Converter={StaticResource notConverter}}"/>
+                <AppBarButton Click="StartButtonClick" Icon="Refresh" Label="Restart"/>
+            </StackPanel>
+        </AppBar>
+    </Page.BottomAppBar>
 </Page>
