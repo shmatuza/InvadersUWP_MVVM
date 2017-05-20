@@ -49,6 +49,7 @@ namespace InvadersUWP_MVVM.Model
         public void StartGame()
         {
             GameOver = false;
+            Score = 0;
 
             foreach (Invader invader in _invaders)
                 OnShipChanged(invader, true);

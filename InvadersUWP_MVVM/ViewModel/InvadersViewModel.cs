@@ -100,7 +100,7 @@ namespace InvadersUWP_MVVM.ViewModel
                     _shotInvaders.Remove(control);
                 }
             }
-            if (_model.GameOver)
+            if (GameOver)
             {
                 OnPropertyChanged("GameOver");
                 _timer.Stop();
