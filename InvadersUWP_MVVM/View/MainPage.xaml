@@ -33,7 +33,7 @@
             </GridView>
         </StackPanel>
 
-        <Border x:Name="playArea" BorderBrush="Blue" BorderThickness="2" CornerRadius="10" Background="Black" Margin="5"
+        <Border x:Name="playArea" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Background="Black" Margin="5"
                 Grid.Row="1" Loaded="playArea_Loaded">
             <ItemsControl ItemsSource="{Binding Path=Sprites}" Margin="5">
                 <ItemsControl.ItemsPanel>
@@ -57,20 +57,21 @@
                     HorizontalAlignment="Center" FontSize="30" Click="StartButtonClick" RequestedTheme="Dark"/>
         </StackPanel>
 
-        <TextBlock Grid.Row="1" Text="Paused" VerticalAlignment="Center" 
-                   FontFamily="Arial Narrow" FontSize="60"
+        <TextBlock Grid.Row="1" Text="Paused" VerticalAlignment="Center" HorizontalAlignment="Center"
+                   FontFamily="Showcard Gothic" FontSize="60"
                    Foreground="Yellow" FontWeight="ExtraBold" FontStyle="Italic"
                    Margin="120,0,0,60" 
                    Visibility="{Binding Paused, Converter={StaticResource visibilityConverter}}"/>
 
-        <Popup x:Name="aboutPopup" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Right" 
+        <Popup x:Name="aboutPopup" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" 
                Width="400" IsOpen="False">
-            <StackPanel Background="BlanchedAlmond" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+            <StackPanel Background="BlanchedAlmond" CornerRadius="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                         Width="360" Margin="20">
-                <TextBlock Text="Invaders" FontSize="60" Foreground="Yellow" FontFamily="Arial Narrow"
-                           FontWeight="ExtraBold" FontStyle="Italic" VerticalAlignment="Center"/>
-                <TextBlock Text="Project made by Damian Matusek"/>
-                <Button Click="ClosePopupButtonClick" Content="Close Popup"/>
+                <TextBlock Text="Invaders" FontSize="60" Foreground="Red" FontFamily="Showcard Gothic"
+                           FontWeight="ExtraBold" FontStyle="Italic" VerticalAlignment="Center"
+                           HorizontalAlignment="Center" Margin="5"/>
+                <TextBlock Text="Project made by Damian Matusek" Margin="5" FontFamily="Showcard Gothic"/>
+                <Button Click="ClosePopupButtonClick" Content="Close Popup" HorizontalAlignment="Center" Margin="5"/>
             </StackPanel>
         </Popup>    
         
