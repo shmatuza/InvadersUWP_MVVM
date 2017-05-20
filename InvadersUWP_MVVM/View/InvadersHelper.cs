@@ -33,6 +33,9 @@ namespace InvadersUWP_MVVM.View
                 case Enums.InvaderType.Spaceship:
                     filename = "spaceship";
                     break;
+                case Enums.InvaderType.Saucer:
+                    filename = "flyingsaucer";
+                    break;
                 case Enums.InvaderType.Star:
                 default:
                     filename = "star";
@@ -48,9 +51,11 @@ namespace InvadersUWP_MVVM.View
         internal static FrameworkElement InvaderControlFactory(Invader invader, double scale)
         {
             IEnumerable<string> imageList = CreateImageList(invader.InvaderType);
-            AnimatedImage invaderControl = new AnimatedImage(imageList, TimeSpan.FromSeconds(.75));
-            invaderControl.Width = invader.Size.Width * scale;
-            invaderControl.Height = invader.Size.Height * scale;
+            AnimatedImage invaderControl = new AnimatedImage(imageList, TimeSpan.FromSeconds(.75))
+            {
+                Width = invader.Size.Width * scale,
+                Height = invader.Size.Height * scale
+            };
             SetCanvasLocation(invaderControl, invader.Location.X * scale, invader.Location.Y * scale);
 
             return invaderControl;
@@ -58,10 +63,12 @@ namespace InvadersUWP_MVVM.View
 
         internal static FrameworkElement ShotControlFactory(Shot shot, double scale)
         {
-            Rectangle shotControl = new Rectangle();
-            shotControl.Fill = new SolidColorBrush(Colors.Yellow);
-            shotControl.Height = Shot.ShotSize.Height * scale;
-            shotControl.Width = Shot.ShotSize.Width * scale;
+            Rectangle shotControl = new Rectangle()
+            {
+                Fill = new SolidColorBrush(Colors.Yellow),
+                Height = Shot.ShotSize.Height * scale,
+                Width = Shot.ShotSize.Width * scale
+            };
             SetCanvasLocation(shotControl, shot.Location.X * scale, shot.Location.Y * scale);
 
             return shotControl;
@@ -69,9 +76,11 @@ namespace InvadersUWP_MVVM.View
 
         internal static FrameworkElement PlayerControlFactory(Player player, double scale)
         {
-            AnimatedImage playerControl = new AnimatedImage(new List<string> { "player.png" }, TimeSpan.FromSeconds(.75));
-            playerControl.Width = player.Size.Width * scale;
-            playerControl.Height = player.Size.Height * scale;
+            AnimatedImage playerControl = new AnimatedImage(new List<string> { "player.png" }, TimeSpan.FromSeconds(.75))
+            {
+                Width = player.Size.Width * scale,
+                Height = player.Size.Height * scale
+            };
             SetCanvasLocation(playerControl, player.Location.X * scale, player.Location.Y * scale);
 
             return playerControl;
@@ -120,17 +129,6 @@ namespace InvadersUWP_MVVM.View
                 default:
                     return Colors.LightSlateGray;
             }
-        }
-
-        internal static FrameworkElement ScanLineFactory(int y, int width, double scale)
-        {
-            FrameworkElement scanLine = new Rectangle();
-            scanLine.Width = width * scale;
-            scanLine.Height = 2;
-            scanLine.Opacity = .5;
-            ((Rectangle)scanLine).Fill = new SolidColorBrush(Colors.White);
-            SetCanvasLocation(scanLine, 0, y * scale);
-            return scanLine;
         }
 
         public static DoubleAnimation CreateDoubleAnimation(FrameworkElement frameworkElement, double fromX, double toY, 

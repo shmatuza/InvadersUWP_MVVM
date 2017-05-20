@@ -11,29 +11,24 @@ namespace InvadersUWP_MVVM.Model
     {
         public readonly static Size PlayAreaSize = new Size(400, 300);
         public const int MaximumPlayerShots = 3;
-        public const int InitialStarCount = 50;
-
-        private readonly Random _random = new Random();
+        public const int InitialStarCount = 50; 
 
         public int Score { get; private set; }
         public int Wave { get; private set; }
         public int Lives { get; private set; }
-
         public bool GameOver { get; private set; }
-
-        private DateTime? _playerDied = null;
         public bool PlayerDying { get { return _playerDied.HasValue; } }
 
-        private Player _player;
-
+        private readonly Random _random = new Random();
         private readonly List<Invader> _invaders = new List<Invader>();
         private readonly List<Shot> _playerShots = new List<Shot>();
         private readonly List<Shot> _invaderShots = new List<Shot>();
         private readonly List<Point> _stars = new List<Point>();
 
+        private Player _player;
         private Enums.Direction _invaderDirection = Enums.Direction.Left;
         private bool _justMovedDown = false;
-
+        private DateTime? _playerDied = null;
         private DateTime _lastUpdated = DateTime.MinValue;
 
         public InvadersModel()
@@ -74,16 +69,6 @@ namespace InvadersUWP_MVVM.Model
             NextWave();
         }
 
-        private void AddAStar()
-        {
-            Point point = new Point(_random.Next((int)PlayAreaSize.Width), _random.Next(20, (int)PlayAreaSize.Height) - 20);
-            if (!_stars.Contains(point))
-            {
-                _stars.Add(point);
-                OnStarChanged(point, false);
-            }
-        }
-
         public void FireShot()
         {
             if (GameOver || PlayerDying || _lastUpdated == DateTime.MinValue)
@@ -104,22 +89,6 @@ namespace InvadersUWP_MVVM.Model
                 return;
             _player.Move(direction);
             OnShipChanged(_player, false);
-        }
-
-        public void Twinkle()
-        {
-            if ((_random.Next(2) == 0) && _stars.Count > ((int)InitialStarCount * .75))
-                RemoveAStar();
-            else if (_stars.Count < ((int)InitialStarCount * 1.5))
-                AddAStar();
-        }
-
-        private void RemoveAStar()
-        {
-            if (_stars.Count <= 0) return;
-            int starIndex = _random.Next(_stars.Count);
-            OnStarChanged(_stars[starIndex], true);
-            _stars.RemoveAt(starIndex);
         }
 
         public void Update(bool paused)
@@ -146,44 +115,17 @@ namespace InvadersUWP_MVVM.Model
             Twinkle();
         }
 
-        private void MoveShots()
-        {
-            List<Shot> playerShots = _playerShots.ToList();
-            foreach (Shot shot in playerShots)
-            {
-                shot.Move();
-                OnShotMoved(shot, false);
-                if (shot.Location.Y < 0)
-                {
-                    _playerShots.Remove(shot);
-                    OnShotMoved(shot, true);
-                }
-            }
-
-            List<Shot> invaderShots = _invaderShots.ToList();
-            foreach (Shot shot in invaderShots)
-            {
-                shot.Move();
-                OnShotMoved(shot, false);
-                if (shot.Location.Y > PlayAreaSize.Height)
-                {
-                    _invaderShots.Remove(shot);
-                    OnShotMoved(shot, true);
-                }
-            }
-        }
-
         private void NextWave()
         {
             Wave++;
             _invaders.Clear();
             RemoveAllShots();
             for (int row = 0; row < 5; row++)
-                for(int column = 0; column < 11; column++)
+                for (int column = 0; column < 11; column++)
                 {
                     Point location = new Point(column * Invader.InvaderSize.Width * 1.4, row * Invader.InvaderSize.Height * 1.4);
                     Invader newInvader;
-                    switch(row)
+                    switch (row)
                     {
                         case 0:
                             newInvader = new Invader(Enums.InvaderType.Spaceship, location, 50);
@@ -203,94 +145,7 @@ namespace InvadersUWP_MVVM.Model
                     }
                     _invaders.Add(newInvader);
                     OnShipChanged(newInvader, false);
-            }
-        }
-
-        private static bool RectsOverlap(Rect r1, Rect r2)
-        {
-            r1.Intersect(r2);
-            if (r1.Width > 0 || r1.Height > 0)
-                return true;
-            return false;
-        }
-
-        private void CheckForPlayerCollisions()
-        {
-            List<Shot> invaderShots = _invaderShots.ToList();
-
-            foreach (Shot shot in invaderShots)
-            {
-                Rect shotRect = new Rect(shot.Location.X, shot.Location.Y, Shot.ShotSize.Width,
-                    Shot.ShotSize.Height);
-                if (RectsOverlap(_player.Area, shotRect))
-                {
-                    if (Lives == 0)
-                        EndGame();
-                    else
-                    {
-                        _invaderShots.Remove(shot);
-                        OnShotMoved(shot, true);
-                        _playerDied = DateTime.Now;
-                        OnShipChanged(_player, true);
-                        RemoveAllShots();
-                        Lives--;
-                    }
                 }
-            }
-
-            var invadersReachedBottom =
-            from invader in _invaders
-            where invader.Area.Bottom > _player.Area.Top
-            select invader;
-
-            if (invadersReachedBottom.Count() > 0)
-                EndGame();
-        }
-
-        private void RemoveAllShots()
-        {
-            List<Shot> invaderShots = _invaderShots.ToList();
-            List<Shot> playerShots = _playerShots.ToList();
-
-            foreach (Shot shot in invaderShots)
-                OnShotMoved(shot, true);
-
-            foreach (Shot shot in playerShots)
-                OnShotMoved(shot, true);
-
-            _invaderShots.Clear();
-            _playerShots.Clear();
-        }
-
-        private void CheckForInvaderCollisions()
-        {
-            List<Shot> shotsHit = new List<Shot>();
-            List<Invader> invadersKilled = new List<Invader>();
-            foreach (Shot shot in _playerShots)
-            {
-                var result = from invader in _invaders
-                             where invader.Area.Contains(shot.Location) == true && shot.Direction == Enums.Direction.Up
-                             select new { InvaderKilled = invader, ShotHit = shot };
-                if (result.Count() > 0)
-                {
-                    foreach (var o in result)
-                    {
-                        shotsHit.Add(o.ShotHit);
-                        invadersKilled.Add(o.InvaderKilled);
-                    }
-                }
-            }
-            foreach (Invader invader in invadersKilled)
-            {
-                Score += invader.Score;
-                _invaders.Remove(invader);
-                OnShipChanged(invader, true);
-            }
-            foreach (Shot shot in shotsHit)
-            {
-                _playerShots.Remove(shot);
-                OnShotMoved(shot, true);
-            }
         }
 
         private void MoveInvaders()
@@ -337,6 +192,32 @@ namespace InvadersUWP_MVVM.Model
             }
         }
 
+        private void MoveShots()
+        {
+            List<Shot> playerShots = _playerShots.ToList();
+            foreach (Shot shot in playerShots)
+            {
+                shot.Move();
+                OnShotMoved(shot, false);
+                if (shot.Location.Y < 0)
+                {
+                    _playerShots.Remove(shot);
+                    OnShotMoved(shot, true);
+                }
+            }
+            List<Shot> invaderShots = _invaderShots.ToList();
+            foreach (Shot shot in invaderShots)
+            {
+                shot.Move();
+                OnShotMoved(shot, false);
+                if (shot.Location.Y > PlayAreaSize.Height)
+                {
+                    _invaderShots.Remove(shot);
+                    OnShotMoved(shot, true);
+                }
+            }
+        }
+
         private void ReturnFire()
         {
             if (_invaderShots.Count() > Wave + 1 || _random.Next(10) < 10 - Wave)
@@ -358,6 +239,120 @@ namespace InvadersUWP_MVVM.Model
 
             OnShotMoved(invaderShot, false);
         }
+
+        private void CheckForInvaderCollisions()
+        {
+            List<Shot> shotsHit = new List<Shot>();
+            List<Invader> invadersKilled = new List<Invader>();
+            foreach (Shot shot in _playerShots)
+            {
+                var result = from invader in _invaders
+                             where invader.Area.Contains(shot.Location) == true && shot.Direction == Enums.Direction.Up
+                             select new { InvaderKilled = invader, ShotHit = shot };
+                if (result.Count() > 0)
+                {
+                    foreach (var o in result)
+                    {
+                        shotsHit.Add(o.ShotHit);
+                        invadersKilled.Add(o.InvaderKilled);
+                    }
+                }
+            }
+            foreach (Invader invader in invadersKilled)
+            {
+                Score += invader.Score;
+                _invaders.Remove(invader);
+                OnShipChanged(invader, true);
+            }
+            foreach (Shot shot in shotsHit)
+            {
+                _playerShots.Remove(shot);
+                OnShotMoved(shot, true);
+            }
+        }
+
+        private void CheckForPlayerCollisions()
+        {
+            List<Shot> invaderShots = _invaderShots.ToList();
+
+            foreach (Shot shot in invaderShots)
+            {
+                Rect shotRect = new Rect(shot.Location.X, shot.Location.Y, Shot.ShotSize.Width,
+                    Shot.ShotSize.Height);
+                if (RectsOverlap(_player.Area, shotRect))
+                {
+                    if (Lives == 0)
+                        EndGame();
+                    else
+                    {
+                        _invaderShots.Remove(shot);
+                        OnShotMoved(shot, true);
+                        _playerDied = DateTime.Now;
+                        OnShipChanged(_player, true);
+                        RemoveAllShots();
+                        Lives--;
+                    }
+                }
+            }
+
+            var invadersReachedBottom =
+            from invader in _invaders
+            where invader.Area.Bottom > _player.Area.Top
+            select invader;
+
+            if (invadersReachedBottom.Count() > 0)
+                EndGame();
+        }
+
+
+        private bool RectsOverlap(Rect r1, Rect r2)
+        {
+            r1.Intersect(r2);
+            if (r1.Width > 0 || r1.Height > 0)
+                return true;
+            return false;
+        }
+
+        private void Twinkle()
+        {
+            if ((_random.Next(2) == 0) && _stars.Count > ((int)InitialStarCount * .75))
+                RemoveAStar();
+            else if (_stars.Count < ((int)InitialStarCount * 1.5))
+                AddAStar();
+        }
+
+        private void AddAStar()
+        {
+            Point point = new Point(_random.Next((int)PlayAreaSize.Width), _random.Next(20, (int)PlayAreaSize.Height) - 20);
+            if (!_stars.Contains(point))
+            {
+                _stars.Add(point);
+                OnStarChanged(point, false);
+            }
+        }
+        private void RemoveAStar()
+        {
+            if (_stars.Count <= 0) return;
+            int starIndex = _random.Next(_stars.Count);
+            OnStarChanged(_stars[starIndex], true);
+            _stars.RemoveAt(starIndex);
+        }
+
+        private void RemoveAllShots()
+        {
+            List<Shot> invaderShots = _invaderShots.ToList();
+            List<Shot> playerShots = _playerShots.ToList();
+
+            foreach (Shot shot in invaderShots)
+                OnShotMoved(shot, true);
+
+            foreach (Shot shot in playerShots)
+                OnShotMoved(shot, true);
+
+            _invaderShots.Clear();
+            _playerShots.Clear();
+        }
+
         internal void UpdateAllShipsAndStars()
         {
             foreach (Shot shot in _playerShots)

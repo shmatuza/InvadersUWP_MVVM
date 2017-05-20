@@ -17,23 +17,12 @@ namespace InvadersUWP_MVVM.ViewModel
 {
     public class InvadersViewModel : INotifyPropertyChanged
     {
-        private readonly ObservableCollection<FrameworkElement> _sprites = new ObservableCollection<FrameworkElement>();
-        private readonly ObservableCollection<object> _lives = new ObservableCollection<object>();
-        private bool _lastPaused = true;
-        private readonly InvadersModel _model = new InvadersModel();
-        private readonly DispatcherTimer _timer = new DispatcherTimer();
-        private FrameworkElement _playerControl = null;
-        private bool _playerFlashing = false;
-        private readonly Dictionary<Invader, FrameworkElement> _invaders = new Dictionary<Invader, FrameworkElement>();
-        private readonly Dictionary<FrameworkElement, DateTime> _shotInvaders = new Dictionary<FrameworkElement, DateTime>();
-        private readonly Dictionary<Shot, FrameworkElement> _shots = new Dictionary<Shot, FrameworkElement>();
-        private readonly Dictionary<Point, FrameworkElement> _stars = new Dictionary<Point, FrameworkElement>();
+        public static double Scale { get; private set; }
 
         public INotifyCollectionChanged Sprites { get { return _sprites; } }
         public bool GameOver { get { return _model.GameOver; } }
         public INotifyCollectionChanged Lives { get { return _lives; } }
         public bool Paused { get; set; }
-        public static double Scale { get; private set; }
         public int Score { get; private set; }
         public Size PlayAreaSize
         {
@@ -43,6 +32,19 @@ namespace InvadersUWP_MVVM.ViewModel
                 _model.UpdateAllShipsAndStars();
             }
         }
+
+        private readonly ObservableCollection<FrameworkElement> _sprites = new ObservableCollection<FrameworkElement>();
+        private readonly ObservableCollection<object> _lives = new ObservableCollection<object>();
+        private readonly InvadersModel _model = new InvadersModel();
+        private readonly DispatcherTimer _timer = new DispatcherTimer(); 
+        private readonly Dictionary<Invader, FrameworkElement> _invaders = new Dictionary<Invader, FrameworkElement>();
+        private readonly Dictionary<FrameworkElement, DateTime> _shotInvaders = new Dictionary<FrameworkElement, DateTime>();
+        private readonly Dictionary<Shot, FrameworkElement> _shots = new Dictionary<Shot, FrameworkElement>();
+        private readonly Dictionary<Point, FrameworkElement> _stars = new Dictionary<Point, FrameworkElement>();
+
+        private bool _lastPaused = true;
+        private FrameworkElement _playerControl = null;
+        private bool _playerFlashing = false;
 
         public InvadersViewModel()
         {
@@ -235,9 +237,7 @@ namespace InvadersUWP_MVVM.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
-            PropertyChangedEventHandler propertyChanged = PropertyChanged;
-            if (propertyChanged != null)
-                propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #region Interaction service with user

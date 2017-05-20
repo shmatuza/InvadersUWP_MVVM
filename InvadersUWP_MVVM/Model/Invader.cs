@@ -17,8 +17,8 @@ namespace InvadersUWP_MVVM.Model
         public Invader(Enums.InvaderType invaderType, Point location, int score)
             : base(location, Invader.InvaderSize)
         {
-            this.InvaderType = invaderType;
-            this.Score = score;
+            InvaderType = invaderType;
+            Score = score;
         }
 
         public override void Move(Enums.Direction direction)
