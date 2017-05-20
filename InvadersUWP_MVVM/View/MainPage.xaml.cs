@@ -118,15 +118,28 @@ namespace InvadersUWP_MVVM
         private void PauseButtonClick(object sender, RoutedEventArgs e)
         {
             if (viewModel.Paused == true)
+            {
                 viewModel.Paused = false;
+                aboutPopup.IsOpen = false;
+            }
             else
                 viewModel.Paused = true;
         }
 
         private void AboutButtonClick(object sender, RoutedEventArgs e)
         {
-            aboutPopup.IsOpen = true;
-            viewModel.Paused = true;
+            if(aboutPopup.IsOpen == true)
+            {
+                aboutPopup.IsOpen = false;
+                viewModel.Paused = false;
+            }
+            else
+            {
+                aboutPopup.IsOpen = true;
+                viewModel.Paused = true;
+                
+            }
+            
         }
 
         private void ClosePopupButtonClick(object sender, RoutedEventArgs e)

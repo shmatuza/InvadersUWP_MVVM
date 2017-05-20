@@ -22,8 +22,8 @@
             <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5" Grid.Row="0">
-            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="{Binding Score}" HorizontalAlignment="Center" Margin="0,0,15,0" FontFamily="Showcard Gothic"/>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,20,0,0" Grid.Row="0">
+            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="{Binding Score}" HorizontalAlignment="Center" FontFamily="Showcard Gothic"/>
             <GridView ItemsSource="{Binding Lives}" HorizontalAlignment="Center" Width="Auto" Height="60" SelectionMode="None">
                 <GridView.ItemTemplate>
                 <DataTemplate>
@@ -71,7 +71,8 @@
                            FontWeight="ExtraBold" FontStyle="Italic" VerticalAlignment="Center"
                            HorizontalAlignment="Center" Margin="5"/>
                 <TextBlock Text="Project made by Damian Matusek" Margin="5" FontFamily="Showcard Gothic"/>
-                <Button Click="ClosePopupButtonClick" Content="Close Popup" HorizontalAlignment="Center" Margin="5"/>
+                <Button Click="ClosePopupButtonClick" Content="Close Popup" HorizontalAlignment="Center"
+                        Margin="5" FontFamily="Showcard Gothic"/>
             </StackPanel>
         </Popup>    
         
