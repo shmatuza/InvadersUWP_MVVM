@@ -92,9 +92,11 @@
                           SelectionMode="None">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBlock Text="{Binding PlayerName}" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap"/>
-                                <TextBlock Text="{Binding Score}" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="NoWrap"/>
+                            <StackPanel Orientation="Horizontal" Margin="10" >
+                                <TextBlock Text="{Binding PlayerName}" Style="{StaticResource TitleTextBlockStyle}" 
+                                           FontFamily="Showcard Gothic" TextWrapping="NoWrap" HorizontalAlignment="Left"/>
+                                <TextBlock Text="{Binding Score}" Style="{StaticResource TitleTextBlockStyle}" TextAlignment="Right" 
+                                           FontFamily="Showcard Gothic" TextWrapping="NoWrap" HorizontalAlignment="Right"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
