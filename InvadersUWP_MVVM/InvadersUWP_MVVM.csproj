@@ -96,6 +96,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Highscore.cs" />
     <Compile Include="ViewModel\BooleanNotConverter.cs" />
     <Compile Include="ViewModel\BooleanVisibilityConverter.cs" />
     <Compile Include="ViewModel\InvadersViewModel.cs" />

@@ -26,9 +26,9 @@
             <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Text="{Binding Score}" HorizontalAlignment="Center" FontFamily="Showcard Gothic"/>
             <GridView ItemsSource="{Binding Lives}" HorizontalAlignment="Center" Width="Auto" Height="60" SelectionMode="None">
                 <GridView.ItemTemplate>
-                <DataTemplate>
-                    <Image Source="ms-appx:///Assets/player.png" Stretch="Fill" Height="15" Width="20"/>
-                </DataTemplate>
+                    <DataTemplate>
+                        <Image Source="ms-appx:///Assets/player.png" Stretch="Fill" Height="15" Width="20"/>
+                    </DataTemplate>
                 </GridView.ItemTemplate>
             </GridView>
         </StackPanel>
@@ -47,14 +47,19 @@
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
                     Visibility="{Binding GameOver, Converter={StaticResource visibilityConverter}}" >
 
-            <TextBlock Grid.Row="1" Text="Game Over" VerticalAlignment="Center" 
+            <TextBlock Text="Game Over" VerticalAlignment="Center" 
                        FontFamily="Showcard Gothic" FontSize="100"
                        Foreground="Red" FontWeight="ExtraBold" FontStyle="Italic"
                        Margin="0,0,0,60" 
                        />
-
+            <StackPanel x:Name="Highscore" Margin="5" Visibility="{Binding HigherThanLastScore}">
+                <TextBox x:Name="PlayerNameBox" Text="Write your name" FontFamily="Showcard Gothic" VerticalContentAlignment="Center"></TextBox>
+                <Button Content="Sumbit your score!" FontFamily="Showcard Gothic" Background="Black" Foreground="Gainsboro"
+                        HorizontalAlignment="Center" FontSize="30" Click="ScoreButtonClick" RequestedTheme="Dark"></Button>
+            </StackPanel>
             <Button Content="Start a new game" FontFamily="Showcard Gothic" Background="Black" Foreground="Gainsboro"
                     HorizontalAlignment="Center" FontSize="30" Click="StartButtonClick" RequestedTheme="Dark"/>
+
         </StackPanel>
 
         <TextBlock Grid.Row="1" Text="Paused" VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -74,13 +79,36 @@
                 <Button Click="ClosePopupButtonClick" Content="Close Popup" HorizontalAlignment="Center"
                         Margin="5" FontFamily="Showcard Gothic"/>
             </StackPanel>
-        </Popup>    
-        
+        </Popup>
+        <Popup x:Name="HighscoresPopup" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" 
+               Width="400" IsOpen="False">
+            <StackPanel Background="BlanchedAlmond" CornerRadius="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                        Width="360" Margin="20">
+                <TextBlock Text="Highscores" FontSize="48" Foreground="Red" FontFamily="Showcard Gothic"
+                           FontWeight="ExtraBold" FontStyle="Italic" VerticalAlignment="Center"
+                           HorizontalAlignment="Center" Margin="5"/>
+                
+                <ListView Grid.Row="1" Margin="0,-10,0,0" ItemsSource="{Binding Highscores}"
+                          SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="{Binding PlayerName}" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap"/>
+                                <TextBlock Text="{Binding Score}" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="NoWrap"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackPanel>
+        </Popup>
+
     </Grid>
     <Page.BottomAppBar>
         <AppBar x:Name="appBar">
             <StackPanel  DataContext="{StaticResource viewModel}" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                 <AppBarButton Click="AboutButtonClick" Icon="Bookmarks" Label="About"/>
+                <AppBarButton Click="ShowHighScoresClick" Label="High Scores" Icon="Favorite"/>
                 <AppBarButton Click="PauseButtonClick" Icon="Pause" Label="Pause"
                         IsEnabled="{Binding GameOver, Converter={StaticResource notConverter}}"/>
                 <AppBarButton Click="StartButtonClick" Icon="Refresh" Label="Restart"/>

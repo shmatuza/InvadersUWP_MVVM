@@ -35,6 +35,12 @@ namespace InvadersUWP_MVVM
             firstTapOfGame = true;
         }
 
+        private void ScoreButtonClick(object sender, RoutedEventArgs e)
+        {
+            viewModel.AddHighScore(PlayerNameBox.Text);
+
+        }
+
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             UpdatePlayAreaSize(new Size(e.NewSize.Width, e.NewSize.Height - 160));
@@ -146,6 +152,20 @@ namespace InvadersUWP_MVVM
         {
             aboutPopup.IsOpen = false;
             viewModel.Paused = false;
+        }
+
+        private void ShowHighScoresClick(object sender, RoutedEventArgs e)
+        {
+            if (HighscoresPopup.IsOpen == false)
+            {
+                HighscoresPopup.IsOpen = true;
+                viewModel.Paused = true;
+            }
+            else
+            {
+                HighscoresPopup.IsOpen = false;
+                viewModel.Paused = false;
+            }
         }
     }
 }
