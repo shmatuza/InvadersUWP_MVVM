@@ -96,6 +96,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DAL\DataContext.cs" />
+    <Compile Include="Migrations\20170608095352_Initial.cs" />
+    <Compile Include="Migrations\20170608095352_Initial.designer.cs">
+      <DependentUpon>20170608095352_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\DataContextModelSnapshot.cs" />
     <Compile Include="Model\Highscore.cs" />
     <Compile Include="ViewModel\BooleanNotConverter.cs" />
     <Compile Include="ViewModel\BooleanVisibilityConverter.cs" />

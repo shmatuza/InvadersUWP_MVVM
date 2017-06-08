@@ -52,7 +52,7 @@
                        Foreground="Red" FontWeight="ExtraBold" FontStyle="Italic"
                        Margin="0,0,0,60" 
                        />
-            <StackPanel x:Name="Highscore" Margin="5" Visibility="{Binding HigherThanLastScore}">
+            <StackPanel x:Name="Highscore" Margin="5" Visibility="{Binding CanAddHighscore}">
                 <TextBox x:Name="PlayerNameBox" Text="Write your name" FontFamily="Showcard Gothic" VerticalContentAlignment="Center"></TextBox>
                 <Button Content="Sumbit your score!" FontFamily="Showcard Gothic" Background="Black" Foreground="Gainsboro"
                         HorizontalAlignment="Center" FontSize="30" Click="ScoreButtonClick" RequestedTheme="Dark"></Button>

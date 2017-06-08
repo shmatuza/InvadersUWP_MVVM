@@ -13,6 +13,8 @@ using FrameworkElement = Windows.UI.Xaml.FrameworkElement;
 using System.ComponentModel;
 using Windows.System;
 using Windows.UI.Xaml.Data;
+using InvadersUWP_MVVM.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvadersUWP_MVVM.ViewModel
 {
@@ -25,7 +27,7 @@ namespace InvadersUWP_MVVM.ViewModel
         public INotifyCollectionChanged Lives { get { return _lives; } }
         public bool Paused { get; set; }
         public int Score { get; private set; }
-        public bool HigherThanLastScore { get; private set; }
+        public bool CanAddHighscore { get; private set; }
         public INotifyCollectionChanged Highscores { get { return _highscores; } }
         public Size PlayAreaSize
         {
@@ -38,7 +40,7 @@ namespace InvadersUWP_MVVM.ViewModel
 
         private readonly ObservableCollection<FrameworkElement> _sprites = new ObservableCollection<FrameworkElement>();
         private readonly ObservableCollection<object> _lives = new ObservableCollection<object>();
-        private ObservableCollection<Highscore> _highscores = new ObservableCollection<Highscore>();
+        private ObservableCollection<Highscore> _highscores;
         private readonly InvadersModel _model = new InvadersModel();
         private readonly DispatcherTimer _timer = new DispatcherTimer(); 
         private readonly Dictionary<Invader, FrameworkElement> _invaders = new Dictionary<Invader, FrameworkElement>();
@@ -59,6 +61,11 @@ namespace InvadersUWP_MVVM.ViewModel
             _model.StarChanged += ModelStarChangedEventHandler;
             _timer.Interval = TimeSpan.FromMilliseconds(100);
             _timer.Tick += TimerTickEventHandler;
+
+            using (var db = new DataContext())
+            {
+                    _highscores = new ObservableCollection<Highscore>(db.Highscore.OrderByDescending(x => x.Score));
+            }
 
             _model.EndGame();
         }
@@ -112,13 +119,13 @@ namespace InvadersUWP_MVVM.ViewModel
                 _timer.Stop();
                 if ((_highscores.Count < 5 && Score > 0) ||(_highscores.Count != 0 && Score > _highscores.Last().Score))
                 {
-                    HigherThanLastScore = true;
-                    OnPropertyChanged("HigherThanLastScore");
+                    CanAddHighscore = true;
+                    OnPropertyChanged("CanAddHighscore");
                 }
                 else
                 {
-                    HigherThanLastScore = false;
-                    OnPropertyChanged("HigherThanLastScore");
+                    CanAddHighscore = false;
+                    OnPropertyChanged("CanAddHighscore");
                 }
             }
         }
@@ -240,22 +247,30 @@ namespace InvadersUWP_MVVM.ViewModel
 
         public void AddHighScore(string playerName)
         {
-            Highscore newHighscore = new Highscore(Score, playerName);
-            if (_highscores.Count >= 5)
-                _highscores[4] = newHighscore;
-            else
+            
+            using (var db = new DataContext())
             {
-                _highscores.Add(newHighscore);
+                Highscore newHighscore = new Highscore(){PlayerName = playerName, Score = this.Score};
+                if (_highscores.Count >= 5)
+                {
+                    db.Highscore.Remove(_highscores.Last());
+                    db.Highscore.Add(newHighscore);
+                }
+                else
+                {
+                    db.Highscore.Add(newHighscore);
+                }
+                db.SaveChanges();
+                _highscores = new ObservableCollection<Highscore>(db.Highscore.OrderByDescending(x => x.Score));
+                OnPropertyChanged("Highscores");
+                CanAddHighscore = false;
+                OnPropertyChanged("CanAddHighscore");
             }
-            _highscores = new ObservableCollection<Highscore>(_highscores.OrderByDescending(x=>x.Score));
-            OnPropertyChanged("Highscores");
-            HigherThanLastScore = false;
-            OnPropertyChanged("HigherThanLastScore");
         }
 
         public void StartGame()
         {
-            HigherThanLastScore = false;
+            CanAddHighscore = false;
             Paused = false;
             foreach (var invader in _invaders.Values) _sprites.Remove(invader);
             foreach (var shot in _shots.Values) _sprites.Remove(shot);

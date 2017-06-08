@@ -4,6 +4,8 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using InvadersUWP_MVVM.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvadersUWP_MVVM
 {
@@ -20,6 +22,10 @@ namespace InvadersUWP_MVVM
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            using (var db = new DataContext())
+            {
+                db.Database.Migrate();
+            }
         }
 
         /// <summary>
